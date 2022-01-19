@@ -1,55 +1,21 @@
-import Restrictions.Restrictions;
+import Restrictions.Restrictions.*;
 
 import java.sql.*;
-import java.text.*;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) {
-
-        String jdbcURL = "jdbc:postgresql://10.62.73.22:5432/";
-        String username = "l3d36";
-        String password = "rafaur36";
-
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            // JDBC and PostgreSQL: https://jdbc.postgresql.org/
-            // PostgreSQL: https://www.postgresql.org/docs/7.4/jdbc-use.html
-
-            // Step 1 - Load driver
-            // Class.forName("org.postgresql.Driver"); // Class.forName() is not needed since JDBC 4.0
-
-            // Step 2 -  Connecting to the Database
-            conn = DriverManager.getConnection(jdbcURL, username, password);
-
-            // Step 3 - Execute statement 1
-            stmt = conn.createStatement();
-
-            rs = stmt.executeQuery("select id from activo");
-            SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-
-            // Step 4 - Get result
-            while (rs.next()) {
-                System.out.println(rs.getString("id"));
-            }
-
-            System.out.println(Restrictions.validDate(conn, "'k4568'", Date.valueOf("2021-04-30")));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            // Step 5 Close connection
-            try {
-                // free the resources of the ResultSet
-                if (rs != null) rs.close();
-                // free the resources of the Statement
-                if (stmt != null) stmt.close();
-                // close connection
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        public static void init () {
+        System.out.println("Escolha uma das opções:\n1 -> Inserir novo activo\n2 -> Substituir um elemento da equipa\n" +
+                "3 -> Colocar um activo fora do serviço\n4 -> Custo total de um activo\n5 -> Listar as pessoas que estão" +
+                "a realizar a intervenção na 'válvula de ar condicionado' ou que gera esse activo\n6 -> Nome" +
+                "dos activos que 'Manuel Fernandes' geriu ou fez intervenção\n7 -> Todos os responsáveis da equipa que " +
+                "são/foram gestores de pelo menos 1 ativo\n8 -> Intervenções programadas para daqui a 1 mês");
     }
+
+        public static void getAnswer (Connection conn) throws SQLException {
+            Scanner scanner = new Scanner(System.in);
+            int answer = scanner.nextInt();
+            if (Objects.equals(answer, 1)) Options.addActive(conn);
+        }
 }
